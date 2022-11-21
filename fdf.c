@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 06:10:27 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/21 14:56:12 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/21 18:46:22 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,31 +54,43 @@ int	round_float(float nb)
 void	draw_line(t_data *img, t_pos p_start, t_pos p_end, int color)
 {
 	t_pos	p_curr;
-	t_pos	delta;
 	int		v_dec;
 	int		delta_up;
 	int		delta_down;
 
-	delta.x = p_end.x - p_start.x;
-	delta.y = p_end.y - p_start.y;
-	v_dec = 2 * delta.y - delta.x;
-	delta_down = 2 * delta.y;
-	delta_up = 2 * (delta.y - delta.y);
+	v_dec = 2 * (p_end.y - p_start.y) - (p_end.x - p_start.x);
+	delta_down = 2 * (p_end.y - p_start.y);
+	delta_up = 2 * ((p_end.y - p_start.y) - (p_end.x - p_start.x));
+}
+
+void	place_pix_right(t_pos p_start, t_pos p_end, t_pos delta, int color)
+{
+	t_pos	p_curr;
+	int		v_dec;
+	int		aprox_up;
+	int		aprox_down;
+
 	p_curr.x = p_start.x;
 	p_curr.y = p_start.y;
+	if (p_end.x >= p_start.x)
+	{
+		if (delta.x >= delta.y)
+		{
+			v_dec = 2 * (delta.y - delta.x);
+			aprox_down = 2 * delta.y;
+			aprox_up = 2 * (delta.y - delta.x);
+		}
+	}
 	while (p_curr.x < p_end.x)
 	{
 		if (v_dec <= 0)
-		{
-			v_dec += delta_down;
-			p_curr.x++;
-		}
+			v_dec += aprox_down;
 		else
 		{
-			v_dec += delta_up;
-			p_curr.x++;
+			v_dec += aprox_up;
 			p_curr.y++;
 		}
+			p_curr.x++;
 		put_pixel(img, p_curr.x, p_curr.y, color);
 	}
 }
@@ -97,15 +109,21 @@ int	main(void)
 	void	*mlx;
 	void	*win;
 	t_data	img;
+	t_pos	origin = get_pos(250, 250);
+	t_pos	right = get_pos(350, 250);
+	t_pos	up = get_pos(250, 150);
+	t_pos	left = get_pos(150, 250);
+	t_pos	down = get_pos(250, 350);
 
 	mlx = mlx_init();
 	win = mlx_new_window(mlx, 500, 500, "fdf");
 	img.img = mlx_new_image(mlx, 500, 500);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 			&img.endian);
-	draw_line(&img, get_pos(100, 100), get_pos(300, 200), 0xff0000);
-	put_pixel(&img, 100, 100, 0xfff);
-	put_pixel(&img, 300, 200, 0xfff);
+	draw_line(&img, origin, right, 0xff0000);
+	draw_line(&img, origin, up, 0xff0000);
+	draw_line(&img, origin, left, 0xff0000);
+	draw_line(&img, origin, down, 0xff0000);
 	mlx_put_image_to_window(mlx, win, img.img, 0, 0);
 	mlx_loop(mlx);
 	return (0);
