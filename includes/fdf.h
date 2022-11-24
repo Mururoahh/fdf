@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/22 09:02:06 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/24 04:14:19 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define FDF_H
 
 # include <math.h>
-# include "../minilibx_macos/mlx.h"
+# include "../minilibx/mlx.h"
 
 typedef struct s_data
 {
