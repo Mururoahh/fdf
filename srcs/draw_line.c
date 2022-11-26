@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:55:53 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/23 02:29:59 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/26 10:43:39 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_pos	get_delta(t_pos p_up, t_pos p_down)
 	return (delta);
 }
 
-void	draw_vrt(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
+void	draw_hrz(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
 
 {
 	double	exact_y;
@@ -47,16 +47,17 @@ void	draw_vrt(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
 	p_curr.x = p_start.x;
 	p_curr.y = p_start.y;
 	exact_y = p_curr.y;
-	while (p_curr.x <= p_end.x)
+	put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
+	while (p_curr.x < p_end.x)
 	{
 		exact_y += coef;
-		p_curr.y = (int)((exact_y + coef) + 0.5);
+		p_curr.y = (int)((exact_y) + 0.5);
 		put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
 		p_curr.x++;
 	}
 }
 
-void	draw_hrz(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
+void	draw_vrt(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
 {
 	double	exact_x;
 	t_pos	p_curr;
@@ -64,12 +65,16 @@ void	draw_hrz(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
 	p_curr.x = p_start.x;
 	p_curr.y = p_start.y;
 	exact_x = p_curr.x;
-	while (p_curr.y <= p_end.y)
+	put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
+	while (p_curr.x < p_end.x)
 	{
-		exact_x += coef;
+		exact_x += fabs(coef);
 		p_curr.x = (int)((exact_x + coef) + 0.5);
 		put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
-		p_curr.y++;
+		if (p_curr.y < p_end.y)
+			p_curr.y++;
+		else
+			p_curr.y--;
 	}
 }
 
@@ -98,5 +103,5 @@ void	draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata)
 	if (delta.x > d_y_abs)
 		draw_hrz(p_left, p_right, (double)delta.y / (double)delta.x, imgdata);
 	else
-		draw_vrt(p_left, p_right, (double)delta.y / (double)delta.x, imgdata);
+		draw_vrt(p_left, p_right, (double)delta.x / (double)delta.y, imgdata);
 }
