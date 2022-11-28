@@ -6,102 +6,58 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:55:53 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/26 10:43:39 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/26 23:08:53 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_pos	pos_cpy(t_pos pos)
-{
-	t_pos	cpy;
-
-	cpy.x = pos.x;
-	cpy.y = pos.y;
-	return (cpy);
-}
-
-t_pos	get_delta(t_pos p_up, t_pos p_down)
-{
-	t_pos	delta;
-
-	if (p_up.x >= p_down.x)
-	{
-		delta.x = p_up.x - p_down.x;
-		delta.y = p_up.y - p_down.y;
-	}
-	else
-	{
-		delta.x = p_down.x - p_up.x;
-		delta.y = p_up.y - p_down.y;
-	}
-	return (delta);
-}
-
-void	draw_hrz(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
+void	draw_hrz(t_pos p_start, t_pos p_end, t_imgdata imgdata)
 
 {
+	double	coef;
 	double	exact_y;
-	t_pos	p_curr;
 
-	p_curr.x = p_start.x;
-	p_curr.y = p_start.y;
-	exact_y = p_curr.y;
-	put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
-	while (p_curr.x < p_end.x)
+	coef = (double)(p_end.y - p_start.y) / (double)(p_end.x - p_start.x);
+	put_pixel(imgdata.img, p_start.x, p_start.y, imgdata.color);
+	exact_y = p_start.y;
+	while (p_start.x <= p_end.x)
 	{
 		exact_y += coef;
-		p_curr.y = (int)((exact_y) + 0.5);
-		put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
-		p_curr.x++;
+		p_start.y = (int)((exact_y) + 0.5);
+		put_pixel(imgdata.img, p_start.x, p_start.y, imgdata.color);
+		p_start.x++;
 	}
 }
 
-void	draw_vrt(t_pos p_start, t_pos p_end, double coef, t_imgdata imgdata)
+void	draw_vrt(t_pos p_start, t_pos p_end, t_imgdata imgdata)
 {
+	double	coef;
 	double	exact_x;
-	t_pos	p_curr;
 
-	p_curr.x = p_start.x;
-	p_curr.y = p_start.y;
-	exact_x = p_curr.x;
-	put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
-	while (p_curr.x < p_end.x)
+	coef = (double)(p_end.x - p_start.x) / (double)(p_end.y - p_start.y);
+	put_pixel(imgdata.img, p_start.x, p_start.y, imgdata.color);
+	exact_x = p_start.x;
+	while (p_start.y <= p_end.y)
 	{
-		exact_x += fabs(coef);
-		p_curr.x = (int)((exact_x + coef) + 0.5);
-		put_pixel(imgdata.img, p_curr.x, p_curr.y, imgdata.color);
-		if (p_curr.y < p_end.y)
-			p_curr.y++;
-		else
-			p_curr.y--;
+		exact_x += coef;
+		p_start.x = (int)((exact_x) + 0.5);
+		put_pixel(imgdata.img, p_start.x, p_start.y, imgdata.color);
+		p_start.y++;
 	}
 }
 
 void	draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata)
 {
-	t_pos	p_right;
-	t_pos	p_left;
-	t_pos	delta;
-	int		d_y_abs;
+	double	coef;
 
-	if (p_start.x >= p_end.x)
-	{
-		p_right = pos_cpy(p_start);
-		p_left = pos_cpy(p_end);
-	}
+	if (p_start.x > p_end.x)
+		return (draw_line(p_end, p_start, imgdata));
+	coef = (double)(p_end.y - p_start.y) / (double)(p_end.x - p_start.x);
+	if (coef < 0.5 && coef > -0.5)
+		return (draw_hrz(p_start, p_end, imgdata));
+	if (p_start.y > p_end.y)
+		return (draw_vrt(p_end, p_start, imgdata));
 	else
-	{
-		p_right = pos_cpy(p_end);
-		p_left = pos_cpy(p_start);
-	}
-	delta.x = (p_right.x - p_left.x);
-	delta.y = (p_right.y - p_left.y);
-	d_y_abs = delta.y;
-	if (delta.y < 0)
-		d_y_abs = -delta.y;
-	if (delta.x > d_y_abs)
-		draw_hrz(p_left, p_right, (double)delta.y / (double)delta.x, imgdata);
-	else
-		draw_vrt(p_left, p_right, (double)delta.x / (double)delta.y, imgdata);
+		return (draw_vrt(p_start, p_end, imgdata));
 }
