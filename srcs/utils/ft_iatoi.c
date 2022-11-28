@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 13:54:47 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/26 14:49:15 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/26 15:40:40 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_iatoi(const char *str, size_t *index)
 	result = 0;
 	sign = 1;
 	while (ft_isinstr("\t\v\n\f\r ", str[*index]) != -1)
-		*index++;
+		(*index)++;
 	if (str[*index] == '+' || str[*index] == '-')
 		if (str[(*index)++] == '-')
 			sign = -1;

@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/26 14:56:29 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/26 15:59:53 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	get_line_size(char *line)
 			while (ft_isdigit(line[i]))
 				i++;
 		}
-		while (line[i] != ' ')
+		while (line[i] && line[i] != ' ')
 			i++;
 	}
 	return (line_size);
@@ -60,8 +60,9 @@ int	*parse_line(char *line, t_map *map)
 		if (!ft_isdigit(line[i]))
 			return (NULL);
 		parsed_line[parsed_index] = ft_iatoi(line, &i);
-		while (line[i] != ' ')
+		while (line[i] && line[i] != ' ')
 			i++;
+		parsed_index++;
 	}
 	return (parsed_line);
 }
@@ -148,6 +149,7 @@ t_map	*parse_map(char *filename)
 		if (map->points[current_line] == NULL)
 			return (NULL);
 		line_head = line_head->next;
+		current_line++;
 	}
 	return (map);
 }
