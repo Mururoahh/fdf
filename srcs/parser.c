@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/26 15:59:53 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/29 08:57:26 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	get_line_size(char *line)
 	{
 		while (line[i] == ' ')
 			i++;
-		if (ft_isdigit(line[i]))
+		if (ft_isdigit(line[i]) || line[i] == '-')
 		{
 			line_size++;
-			while (ft_isdigit(line[i]))
+			while (ft_isdigit(line[i]) || line[i] == '-')
 				i++;
 		}
 		while (line[i] && line[i] != ' ')
@@ -57,7 +57,7 @@ int	*parse_line(char *line, t_map *map)
 	{
 		while (line[i] == ' ')
 			i++;
-		if (!ft_isdigit(line[i]))
+		if (!ft_isdigit(line[i]) && line[i] != '-')
 			return (NULL);
 		parsed_line[parsed_index] = ft_iatoi(line, &i);
 		while (line[i] && line[i] != ' ')

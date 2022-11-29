@@ -6,56 +6,20 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/28 07:14:43 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/29 09:46:21 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_pos	get_hrz_pos(t_pos origin)
-{
-	t_pos	point_pos;
-	double	rotated_x;
-	double	rotated_y;
-
-	rotated_x = cos(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-	rotated_y = sin(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-	point_pos.x = origin.x + (rotated_x);
-	point_pos.y = origin.y + (rotated_y);
-	return (point_pos);
-}
-
-t_pos	get_vrt_pos(t_pos origin)
-{
-	t_pos	point_pos;
-	double	rotated_x;
-	double	rotated_y;
-
-	rotated_x = sin(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-	rotated_y = cos(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-	point_pos.x = origin.x + (rotated_x);
-	point_pos.y = origin.y - (rotated_y);
-	return (point_pos);
-}
-
-t_pos	draw_point(t_pos origin, t_imgdata imgdata)
-{
-	t_pos	current_pos;
-
-	current_pos = get_hrz_pos(origin);
-	draw_line(origin, current_pos, imgdata);
-	draw_line(current_pos, get_vrt_pos(current_pos), imgdata);
-	origin = current_pos;
-	return (origin);
-}
-
 t_pos_3d	init_3d_pos(int x, int y, int z)
 {
 	t_pos_3d	pos_3d;
 
-	pos_3d.x = x * POINT_DISTANCE;
-	pos_3d.y = y * POINT_DISTANCE;
+	pos_3d.x = x;
+	pos_3d.y = y;
 	pos_3d.z = z;
+	return (pos_3d);
 }
 
 t_pos_3d	**init_3d_map(t_map map)
@@ -70,7 +34,7 @@ t_pos_3d	**init_3d_map(t_map map)
 	i = 0;
 	while (i < map.height)
 	{
-		map_3d[i] = malloc (map.width * sizeof(t_pos_3d));
+		map_3d[i] = malloc(map.width * sizeof(t_pos_3d));
 		if (map_3d[i] == NULL)
 			return (NULL);
 		j = 0;
@@ -84,27 +48,90 @@ t_pos_3d	**init_3d_map(t_map map)
 	return (map_3d);
 }
 
-void	draw_map(t_map map, t_imgdata imgdata)
+void	apply_matrix_to_map(t_pos_3d **map_3d, t_matrix matrix, int height, int width)
 {
-	t_pos	origin;
-	t_pos	last_pos;
-	int		height;
-	int		width;
+	t_vec_3d	vec;
+	int			i;
+	int			j;
 
-	origin.x = (RES_X / 2) - ((map.width * POINT_DISTANCE) / 2);
-	origin.y = (RES_Y / 2) - ((map.height * POINT_DISTANCE) / 2);
-	height = 0;
-	while (height <= map.height)
+	i = 0;
+	while (i < height)
 	{
-		last_pos = origin;
-		width = 0;
-		while (width <= map.width)
+		j = 0;
+		while (j < width)
 		{
-			last_pos = draw_point(last_pos, imgdata);
-			width++;
+			vec.x = map_3d[i][j].x;
+			vec.y = map_3d[i][j].y;
+			vec.z = map_3d[i][j].z;
+			vec = apply_matrix(vec, matrix);
+			map_3d[i][j].x = vec.x;
+			map_3d[i][j].y = vec.y;
+			map_3d[i][j].z = vec.z;
+			j++;
 		}
-		origin.x -= sin(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-		origin.y += sin(((ROTATION * M_PI) / 180)) * (POINT_DISTANCE);
-		height++;
+		i++;
+	}
+}
+
+t_pos	**get_projected_map(t_pos_3d **map_3d, int height, int width)
+{
+	t_pos		**proj_map;
+	t_vec_3d	curr_pvect;
+	t_matrix	matrix;
+	int			i;
+	int			j;
+
+	proj_map = malloc(height * sizeof(t_pos_3d *));
+	i = 0;
+	while (i < height)
+		proj_map[i++] = malloc(width * sizeof(t_pos_3d));
+	matrix = get_rotation_z_matrix(-M_PI / 4.0);
+	apply_matrix_to_map(map_3d, matrix, height, width);
+	matrix = get_rotation_x_matrix(-M_PI / 2.0);
+	apply_matrix_to_map(map_3d, matrix, height, width);
+	matrix = get_projection_matrix();
+	i = 0;
+	while (i < height)
+	{
+		j = 0;
+		while (j < width)
+		{
+			curr_pvect.x = map_3d[i][j].x;
+			curr_pvect.y = map_3d[i][j].y;
+			curr_pvect.z = map_3d[i][j].z + -60.0;
+			curr_pvect = apply_matrix(curr_pvect, matrix);
+			curr_pvect.x = (curr_pvect.x + 1.0) * (0.5 * (float)RES_X) + 0.5;
+			curr_pvect.y = (curr_pvect.y + 1.0) * (0.5 * (float)RES_Y) + 0.5;
+			proj_map[i][j].x = curr_pvect.x;
+			proj_map[i][j].y = curr_pvect.y;
+			j++;
+		}
+		i ++;
+	}
+	return (proj_map);
+}
+
+void	draw_map(t_map raw_map, t_imgdata imgdata)
+{
+	t_pos_3d	**map_3d;
+	t_pos		**proj_map;
+	int			i;
+	int			j;
+
+	map_3d = init_3d_map(raw_map);
+	proj_map = get_projected_map(map_3d, raw_map.height, raw_map.width);
+	i = 0;
+	while (i < raw_map.height)
+	{
+		j = 0;
+		while (j < raw_map.width)
+		{
+			if (i > 0)
+				draw_line(proj_map[i][j], proj_map[i - 1][j], imgdata);
+			if (j > 0)
+				draw_line(proj_map[i][j], proj_map[i][j - 1], imgdata);
+			j++;
+		}
+		i++;
 	}
 }

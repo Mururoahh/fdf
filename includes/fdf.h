@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/28 06:11:32 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/11/29 11:03:26 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		x_size;
+	int		y_size;
 }			t_data;
 
 typedef struct s_imgdata
@@ -54,6 +56,13 @@ typedef struct s_pos_3d
 	int	z;
 }	t_pos_3d;
 
+typedef struct s_vec_3d
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_vec_3d;
+
 typedef struct s_map_line
 {
 	char				*line;
@@ -67,11 +76,20 @@ typedef struct s_map
 	int	**points;
 }				t_map;
 
-t_map	*parse_map(char *filename);
-t_pos	get_pos(int x, int y);
-void	put_pixel(t_data *data, int x, int y, int color);
-void	draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata);
-void	draw_map(t_map map, t_imgdata imgdata);
-char	*get_next_line(int fd);
+typedef struct s_matrix
+{
+	float	m[4][4];
+}			t_matrix;
+
+t_map		*parse_map(char *filename);
+t_pos		get_pos(int x, int y);
+void		put_pixel(t_data *data, int x, int y, int color);
+void		draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata);
+void		draw_map(t_map map, t_imgdata imgdata);
+char		*get_next_line(int fd);
+t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
+t_matrix	get_projection_matrix(void);
+t_matrix	get_rotation_x_matrix(double theta);
+t_matrix	get_rotation_z_matrix(double theta);
 
 #endif
