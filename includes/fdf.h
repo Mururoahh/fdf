@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/02 09:36:14 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 11:05:33 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void		draw_map(t_map map, t_imgdata imgdata);
 char		*get_next_line(int fd);
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
 t_vec_3d	init_vect(double x, double y, double z);
+t_vec_3d	add_vect(t_vec_3d v1, t_vec_3d v2);
 t_vec_3d	div_vect(t_vec_3d v1, double k);
 t_matrix	get_projection_matrix(void);
 t_matrix	get_translation_matrix(float x, float y, float z);

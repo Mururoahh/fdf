@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/02 09:48:44 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 11:22:55 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,39 @@ void	apply_matrix_to_map(t_vec_3d **map_3d, t_matrix matrix, int height, int wid
 	}
 }
 
+t_pos	**init_projected_map(int height, int width)
+{
+	t_pos		**proj_map;
+	int			i;
+
+	proj_map = malloc(height * sizeof(t_vec_3d *));
+	if (proj_map == NULL)
+	{
+		//ERRNO
+		exit(1);
+	}
+	i = 0;
+	while (i < height)
+	{
+		proj_map[i] = malloc(width * sizeof(t_vec_3d));
+		if (proj_map[i] == NULL)
+		{
+			//ERRNO
+			exit(1);
+		}
+		i++;
+	}
+	return (proj_map);
+}
+
 t_pos	**get_projected_map(t_vec_3d **map_3d, int height, int width)
 {
 	t_pos		**proj_map;
-	t_vec_3d	curr_pvect;
 	t_matrix	matrix;
 	int			i;
 	int			j;
 
-	proj_map = malloc(height * sizeof(t_vec_3d *));
-	i = 0;
-	while (i < height)
-	proj_map[i++] = malloc(width * sizeof(t_vec_3d));
-	bzero(&matrix, sizeof(matrix));
+	proj_map = init_projected_map(height, width);
 	matrix = get_world_matrix();
 	apply_matrix_to_map(map_3d, matrix, height, width);
 	matrix = get_projection_matrix();
@@ -96,17 +116,15 @@ t_pos	**get_projected_map(t_vec_3d **map_3d, int height, int width)
 		j = 0;
 		while (j < width)
 		{
-			curr_pvect.x = map_3d[i][j].x;
-			curr_pvect.y = map_3d[i][j].y;
-			curr_pvect.z = map_3d[i][j].z - 40.0;
-			curr_pvect = apply_matrix(curr_pvect, matrix);
-			curr_pvect.x = (curr_pvect.x + 1.0) * (0.5 * (float)RES_X) + 0.5;
-			curr_pvect.y = (curr_pvect.y + 1.5) * (0.5 * (float)RES_Y) + 0.5;
-			proj_map[i][j].x = curr_pvect.x;
-			proj_map[i][j].y = curr_pvect.y;
+			map_3d[i][j].z = map_3d[i][j].z - 40.0;
+			map_3d[i][j] = apply_matrix(map_3d[i][j], matrix);
+			map_3d[i][j] = div_vect(map_3d[i][j], map_3d[i][j].w);
+			map_3d[i][j] = add_vect(map_3d[i][j], init_vect(1.0, 1.0, .0));
+			proj_map[i][j].x = map_3d[i][j].x * (0.5 * (float)RES_X) + 0.5;
+			proj_map[i][j].y = map_3d[i][j].y * (0.5 * (float)RES_Y) + 0.5;
 			j++;
 		}
-		i ++;
+		i++;
 	}
 	return (proj_map);
 }

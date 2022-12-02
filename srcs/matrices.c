@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:02:12 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/02 09:48:34 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 11:32:46 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,12 @@
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m)
 {
 	t_vec_3d	r;
-	double		w;
 
-	r.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
-	r.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1];
-	r.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2];
-	w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
-	if (w != 0)
-	{
-		r.x /= w;
-		r.y /= w;
-		r.z /= w;
-	}
-	return (r);
+		r.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0];
+		r.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1];
+		r.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2];
+		r.w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3];
+		return r;
 }
 
 void	bzero(void *ptr, size_t size)
@@ -48,7 +41,7 @@ t_matrix	multiply_matrix(t_matrix m1, t_matrix m2)
 		r = 0;
 		while (r < 4)
 		{
-			res.m[c][r] = m1.m[r][0] * m2.m[0][c]
+			res.m[r][c] = m1.m[r][0] * m2.m[0][c]
 				+ m1.m[r][1] * m2.m[1][c]
 				+ m1.m[r][2] * m2.m[2][c]
 				+ m1.m[r][3] * m2.m[3][c];
@@ -146,6 +139,6 @@ t_matrix	get_world_matrix(void)
 	mat = get_rotation_x_matrix(M_PI);
 	mat = multiply_matrix(mat, get_rotation_y_matrix(M_PI / 4.0));
 	mat = multiply_matrix(mat, get_rotation_z_matrix(M_PI / 4.0));
-	mat = multiply_matrix(mat, get_translation_matrix(.0, .0, .0));
+	mat = multiply_matrix(mat, get_translation_matrix(100.0, 100.0, .0));
 	return (mat);
 }
