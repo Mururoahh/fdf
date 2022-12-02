@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/29 11:03:26 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 09:36:14 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <fcntl.h>
 # include "../mlx/mlx.h"
 # include "ft_utils.h"
+
+# include <stdio.h>
 
 # define RES_X 1920
 # define RES_Y 1080
@@ -49,18 +51,12 @@ typedef struct s_pos
 	int	y;
 }	t_pos;
 
-typedef struct s_pos_3d
-{
-	int	x;
-	int	y;
-	int	z;
-}	t_pos_3d;
-
 typedef struct s_vec_3d
 {
 	float	x;
 	float	y;
 	float	z;
+	float	w;
 }	t_vec_3d;
 
 typedef struct s_map_line
@@ -88,8 +84,15 @@ void		draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata);
 void		draw_map(t_map map, t_imgdata imgdata);
 char		*get_next_line(int fd);
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
+t_vec_3d	init_vect(double x, double y, double z);
+t_vec_3d	div_vect(t_vec_3d v1, double k);
 t_matrix	get_projection_matrix(void);
+t_matrix	get_translation_matrix(float x, float y, float z);
 t_matrix	get_rotation_x_matrix(double theta);
+t_matrix	get_rotation_y_matrix(double theta);
 t_matrix	get_rotation_z_matrix(double theta);
+t_matrix	get_world_matrix(void);
+t_matrix	multiply_matrix(t_matrix m1, t_matrix m2);
+void		bzero(void *ptr, size_t size);
 
 #endif

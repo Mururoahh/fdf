@@ -6,35 +6,36 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/29 09:46:21 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 09:48:44 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_pos_3d	init_3d_pos(int x, int y, int z)
+t_vec_3d	init_3d_pos(double x, double y, double z)
 {
-	t_pos_3d	pos_3d;
+	t_vec_3d	vec_3d;
 
-	pos_3d.x = x;
-	pos_3d.y = y;
-	pos_3d.z = z;
-	return (pos_3d);
+	vec_3d.x = x;
+	vec_3d.y = y;
+	vec_3d.z = z;
+	vec_3d.w = 1;
+	return (vec_3d);
 }
 
-t_pos_3d	**init_3d_map(t_map map)
+t_vec_3d	**init_3d_map(t_map map)
 {
-	t_pos_3d	**map_3d;
+	t_vec_3d	**map_3d;
 	int			i;
 	int			j;
 
-	map_3d = malloc(map.height * sizeof(t_pos_3d *));
+	map_3d = malloc(map.height * sizeof(t_vec_3d *));
 	if (map_3d == NULL)
 		return (NULL);
 	i = 0;
 	while (i < map.height)
 	{
-		map_3d[i] = malloc(map.width * sizeof(t_pos_3d));
+		map_3d[i] = malloc(map.width * sizeof(t_vec_3d));
 		if (map_3d[i] == NULL)
 			return (NULL);
 		j = 0;
@@ -48,7 +49,7 @@ t_pos_3d	**init_3d_map(t_map map)
 	return (map_3d);
 }
 
-void	apply_matrix_to_map(t_pos_3d **map_3d, t_matrix matrix, int height, int width)
+void	apply_matrix_to_map(t_vec_3d **map_3d, t_matrix matrix, int height, int width)
 {
 	t_vec_3d	vec;
 	int			i;
@@ -73,7 +74,7 @@ void	apply_matrix_to_map(t_pos_3d **map_3d, t_matrix matrix, int height, int wid
 	}
 }
 
-t_pos	**get_projected_map(t_pos_3d **map_3d, int height, int width)
+t_pos	**get_projected_map(t_vec_3d **map_3d, int height, int width)
 {
 	t_pos		**proj_map;
 	t_vec_3d	curr_pvect;
@@ -81,13 +82,12 @@ t_pos	**get_projected_map(t_pos_3d **map_3d, int height, int width)
 	int			i;
 	int			j;
 
-	proj_map = malloc(height * sizeof(t_pos_3d *));
+	proj_map = malloc(height * sizeof(t_vec_3d *));
 	i = 0;
 	while (i < height)
-		proj_map[i++] = malloc(width * sizeof(t_pos_3d));
-	matrix = get_rotation_z_matrix(-M_PI / 4.0);
-	apply_matrix_to_map(map_3d, matrix, height, width);
-	matrix = get_rotation_x_matrix(-M_PI / 2.0);
+	proj_map[i++] = malloc(width * sizeof(t_vec_3d));
+	bzero(&matrix, sizeof(matrix));
+	matrix = get_world_matrix();
 	apply_matrix_to_map(map_3d, matrix, height, width);
 	matrix = get_projection_matrix();
 	i = 0;
@@ -98,10 +98,10 @@ t_pos	**get_projected_map(t_pos_3d **map_3d, int height, int width)
 		{
 			curr_pvect.x = map_3d[i][j].x;
 			curr_pvect.y = map_3d[i][j].y;
-			curr_pvect.z = map_3d[i][j].z + -60.0;
+			curr_pvect.z = map_3d[i][j].z - 40.0;
 			curr_pvect = apply_matrix(curr_pvect, matrix);
 			curr_pvect.x = (curr_pvect.x + 1.0) * (0.5 * (float)RES_X) + 0.5;
-			curr_pvect.y = (curr_pvect.y + 1.0) * (0.5 * (float)RES_Y) + 0.5;
+			curr_pvect.y = (curr_pvect.y + 1.5) * (0.5 * (float)RES_Y) + 0.5;
 			proj_map[i][j].x = curr_pvect.x;
 			proj_map[i][j].y = curr_pvect.y;
 			j++;
@@ -113,7 +113,7 @@ t_pos	**get_projected_map(t_pos_3d **map_3d, int height, int width)
 
 void	draw_map(t_map raw_map, t_imgdata imgdata)
 {
-	t_pos_3d	**map_3d;
+	t_vec_3d	**map_3d;
 	t_pos		**proj_map;
 	int			i;
 	int			j;

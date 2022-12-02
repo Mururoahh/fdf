@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:02:12 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/29 11:03:37 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/02 09:48:34 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,49 @@
 
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m)
 {
-	t_vec_3d	res;
-	float		w;
+	t_vec_3d	r;
+	double		w;
 
-	res.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0];
-	res.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1];
-	res.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2];
+	r.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
+	r.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1];
+	r.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2];
 	w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
 	if (w != 0)
 	{
-		res.x /= w;
-		res.y /= w;
-		res.z /= w;
+		r.x /= w;
+		r.y /= w;
+		r.z /= w;
 	}
-	return (res);
+	return (r);
 }
 
-static void	bzero(void *ptr, size_t size)
+void	bzero(void *ptr, size_t size)
 {
 	while (size--)
 		((unsigned char *)ptr)[size] = 0;
+}
+
+t_matrix	multiply_matrix(t_matrix m1, t_matrix m2)
+{
+	t_matrix	res;
+	int			c;
+	int			r;
+
+	c = 0;
+	while (c < 4)
+	{
+		r = 0;
+		while (r < 4)
+		{
+			res.m[c][r] = m1.m[r][0] * m2.m[0][c]
+				+ m1.m[r][1] * m2.m[1][c]
+				+ m1.m[r][2] * m2.m[2][c]
+				+ m1.m[r][3] * m2.m[3][c];
+			r++;
+		}
+		c++;
+	}
+	return (res);
 }
 
 t_matrix	get_projection_matrix(void)
@@ -59,17 +82,46 @@ t_matrix	get_projection_matrix(void)
 	return (matrix);
 }
 
+t_matrix	get_translation_matrix(float x, float y, float z)
+{
+	t_matrix	matrix;
+
+	bzero(&matrix, sizeof(t_matrix));
+	matrix.m[0][0] = 1.0f;
+	matrix.m[1][1] = 1.0f;
+	matrix.m[2][2] = 1.0f;
+	matrix.m[3][3] = 1.0f;
+	matrix.m[3][0] = x;
+	matrix.m[3][1] = y;
+	matrix.m[3][2] = z;
+	return (matrix);
+}
+
 t_matrix	get_rotation_x_matrix(double theta)
 {
 	t_matrix	matrix;
 
 	bzero(&matrix, sizeof(t_matrix));
 	matrix.m[0][0] = 1;
-	matrix.m[1][1] = cos(theta * 0.5);
-	matrix.m[1][2] = sin(theta * 0.5);
-	matrix.m[2][1] = -sin(theta * 0.5);
-	matrix.m[2][2] = cos(theta * 0.5);
+	matrix.m[1][1] = cos(theta);
+	matrix.m[1][2] = sin(theta);
+	matrix.m[2][1] = -sin(theta);
+	matrix.m[2][2] = cos(theta);
 	matrix.m[3][3] = 1;
+	return (matrix);
+}
+
+t_matrix	get_rotation_y_matrix(double theta)
+{
+	t_matrix	matrix;
+
+	bzero(&matrix, sizeof(t_matrix));
+	matrix.m[0][0] = cos(theta);
+	matrix.m[0][2] = sin(theta);
+	matrix.m[2][0] = -sin(theta);
+	matrix.m[1][1] = 1.0f;
+	matrix.m[2][2] = cos(theta);
+	matrix.m[3][3] = 1.0f;
 	return (matrix);
 }
 
@@ -82,7 +134,18 @@ t_matrix	get_rotation_z_matrix(double theta)
 	matrix.m[0][1] = sin(theta);
 	matrix.m[1][0] = -sin(theta);
 	matrix.m[1][1] = cos(theta);
-	matrix.m[2][2] = 1;
-	matrix.m[3][3] = 1;
+	matrix.m[2][2] = 1.0;
+	matrix.m[3][3] = 1.0;
 	return (matrix);
+}
+
+t_matrix	get_world_matrix(void)
+{
+	t_matrix	mat;
+
+	mat = get_rotation_x_matrix(M_PI);
+	mat = multiply_matrix(mat, get_rotation_y_matrix(M_PI / 4.0));
+	mat = multiply_matrix(mat, get_rotation_z_matrix(M_PI / 4.0));
+	mat = multiply_matrix(mat, get_translation_matrix(.0, .0, .0));
+	return (mat);
 }
