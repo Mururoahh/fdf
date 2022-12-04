@@ -6,7 +6,8 @@ NAME			=	fdf
 
 SRCS			=	main.c			fdf.c		\
 					draw_line.c		draw_map.c	\
-					matrices.c		vector.c
+					matrices.c		vector.c	\
+					keys.c
 
 UTILS			=	ft_iatoi.c		ft_isdigit.c
 

@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/04 01:38:33 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/04 03:38:08 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,34 @@ typedef struct s_matrix
 	float	m[4][4];
 }			t_matrix;
 
+typedef struct s_trans
+{
+	double	x;
+	double	y;
+	double	z;
+}			t_trans;
+
+typedef struct s_rot
+{
+	double	pitch;
+	double	yaw;
+	double	roll;
+}			t_rot;
+
 typedef struct s_fdf
 {
-	void		*mlx;
-	void		*win;
-	t_data		img;
-	t_map		map;
+	void	*mlx;
+	void	*win;
+	t_data	img;
+	t_map	map;
+	t_trans	trans;
+	t_rot	rot;
 }				t_fdf;
 
 t_map		parse_map(char *filename);
 void		put_pixel(t_data *data, int x, int y, int color);
 void		draw_line(t_vec_3d p_start, t_vec_3d p_end, t_data *imgdata);
-void		draw_map(t_fdf *fdf);
+void		draw_map(t_fdf fdf);
 char		*get_next_line(int fd);
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
 t_vec_3d	init_vect(double x, double y, double z);
@@ -94,7 +110,7 @@ double		vect_dot_product(t_vec_3d v1, t_vec_3d v2);
 t_vec_3d	vect_normalise(t_vec_3d v);
 t_vec_3d	vect_cross_product(t_vec_3d v1, t_vec_3d v2);
 t_matrix	get_projection_matrix(void);
-t_matrix	get_world_matrix(void);
+t_matrix	get_world_matrix(t_trans trans, t_rot rot);
 t_matrix	get_camera_matrix(t_vec_3d camera);
 t_matrix	multiply_matrix(t_matrix m1, t_matrix m2);
 t_matrix	inverse_matrix(t_matrix m);
