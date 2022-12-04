@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/04 05:28:17 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/04 07:17:10 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	get_projected_map(t_map *map, t_trans trans, t_rot rot)
 			map->points[i][j] = apply_matrix(map->points[i][j], matrix);
 			map->points[i][j] = div_vect(map->points[i][j], map->points[i][j].w);
 			map->points[i][j].x += 1.0;
-			map->points[i][j].y += 1.0;
+			map->points[i][j].y += 1.0;kn n 
 			map->points[i][j].x *= (int)((0.5 * (float)RES_X) + 0.5);
 			map->points[i][j].y *= (int)((0.5 * (float)RES_Y) + 0.5);
 			j++;
@@ -107,5 +107,6 @@ void	draw_map(t_fdf fdf)
 		}
 		i++;
 	}
+	// FREE CPY
 	mlx_put_image_to_window(fdf.mlx, fdf.win, fdf.img.img, 0, 0);
 }
