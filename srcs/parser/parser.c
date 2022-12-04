@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/11/29 08:57:26 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/03 14:37:06 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,37 +34,6 @@ int	get_line_size(char *line)
 			i++;
 	}
 	return (line_size);
-}
-
-int	*parse_line(char *line, t_map *map)
-{
-	int		*parsed_line;
-	int		parsed_index;
-	int		line_size;
-	size_t	i;
-
-	line_size = get_line_size(line);
-	parsed_line = malloc(sizeof(int) * (line_size));
-	if (parsed_line == NULL)
-		return (NULL);
-	if (map->width == -1)
-		map->width = line_size;
-	else if (map->width != line_size)
-		return (NULL);
-	parsed_index = 0;
-	i = 0;
-	while (line[i])
-	{
-		while (line[i] == ' ')
-			i++;
-		if (!ft_isdigit(line[i]) && line[i] != '-')
-			return (NULL);
-		parsed_line[parsed_index] = ft_iatoi(line, &i);
-		while (line[i] && line[i] != ' ')
-			i++;
-		parsed_index++;
-	}
-	return (parsed_line);
 }
 
 t_map_line	*push_map_line(t_map_line **head, char *line)
@@ -125,31 +94,57 @@ size_t	lstrev(t_map_line **head)
 	return (count);
 }
 
-t_map	*parse_map(char *filename)
+void	parse_line(char *line, t_map *map, size_t row_i)
+{
+	size_t	col_i;
+	size_t	line_size;
+	size_t	i;
+
+	line_size = get_line_size(line);
+	map->points[row_i] = malloc(sizeof(t_vec_3d) * (line_size));
+	if (map->points[row_i] == NULL)
+		exit (1);
+		//ERRNO
+	if (map->width == 0)
+		map->width = line_size;
+	else if (map->width != line_size)
+		exit (1);
+	col_i = 0;
+	i = 0;
+	while (line[i])
+	{
+		while (line[i] == ' ')
+			i++;
+		if (!ft_isdigit(line[i]) && line[i] != '-')
+			exit (1);
+		map->points[row_i][col_i] = init_vect(col_i, row_i, ft_iatoi(line, &i));
+		while (line[i] && line[i] != ' ')
+			i++;
+		col_i++;
+	}
+}
+
+t_map	parse_map(char *filename)
 {
 	t_map_line	*line_head;
-	size_t		map_height;
-	size_t		current_line;
-	t_map		*map;
+	size_t		row_i;
+	t_map		map;
 
-	map = malloc(sizeof(t_map));
 	line_head = map_to_list(filename);
 	if (line_head == NULL)
-		return (NULL);
-	map_height = lstrev(&line_head);
-	map->height = map_height;
-	map->points = malloc(map_height * sizeof(int *));
-	if (map->points == NULL)
-		return (NULL);
-	map->width = -1;
-	current_line = 0;
+	//ERRNO
+		exit(1);
+	map.height = lstrev(&line_head);
+	map.points = malloc(map.height * sizeof(int *));
+	if (map.points == NULL)
+		exit(1);
+	map.width = 0;
+	row_i = 0;
 	while (line_head)
 	{
-		map->points[current_line] = parse_line(line_head->line, map);
-		if (map->points[current_line] == NULL)
-			return (NULL);
+		parse_line(line_head->line, &map, row_i);
 		line_head = line_head->next;
-		current_line++;
+		row_i++;
 	}
 	return (map);
 }

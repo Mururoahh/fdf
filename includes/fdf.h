@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/02 11:05:33 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/04 01:38:33 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ typedef struct s_imgdata
 	int		color;
 }			t_imgdata;
 
-typedef struct s_pos
-{
-	int	x;
-	int	y;
-}	t_pos;
-
 typedef struct s_vec_3d
 {
 	float	x;
@@ -67,9 +61,9 @@ typedef struct s_map_line
 
 typedef struct s_map
 {
-	int	height;
-	int	width;
-	int	**points;
+	size_t		height;
+	size_t		width;
+	t_vec_3d	**points;
 }				t_map;
 
 typedef struct s_matrix
@@ -77,23 +71,34 @@ typedef struct s_matrix
 	float	m[4][4];
 }			t_matrix;
 
-t_map		*parse_map(char *filename);
-t_pos		get_pos(int x, int y);
+typedef struct s_fdf
+{
+	void		*mlx;
+	void		*win;
+	t_data		img;
+	t_map		map;
+}				t_fdf;
+
+t_map		parse_map(char *filename);
 void		put_pixel(t_data *data, int x, int y, int color);
-void		draw_line(t_pos p_start, t_pos p_end, t_imgdata imgdata);
-void		draw_map(t_map map, t_imgdata imgdata);
+void		draw_line(t_vec_3d p_start, t_vec_3d p_end, t_data *imgdata);
+void		draw_map(t_fdf *fdf);
 char		*get_next_line(int fd);
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
 t_vec_3d	init_vect(double x, double y, double z);
 t_vec_3d	add_vect(t_vec_3d v1, t_vec_3d v2);
+t_vec_3d	sub_vect(t_vec_3d v1, t_vec_3d v2);
 t_vec_3d	div_vect(t_vec_3d v1, double k);
+t_vec_3d	mul_vect(t_vec_3d v1, double k);
+double		vect_dot_product(t_vec_3d v1, t_vec_3d v2);
+t_vec_3d	vect_normalise(t_vec_3d v);
+t_vec_3d	vect_cross_product(t_vec_3d v1, t_vec_3d v2);
 t_matrix	get_projection_matrix(void);
-t_matrix	get_translation_matrix(float x, float y, float z);
-t_matrix	get_rotation_x_matrix(double theta);
-t_matrix	get_rotation_y_matrix(double theta);
-t_matrix	get_rotation_z_matrix(double theta);
 t_matrix	get_world_matrix(void);
+t_matrix	get_camera_matrix(t_vec_3d camera);
 t_matrix	multiply_matrix(t_matrix m1, t_matrix m2);
+t_matrix	inverse_matrix(t_matrix m);
 void		bzero(void *ptr, size_t size);
+void		clear_img(t_data *img);
 
 #endif
