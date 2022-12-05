@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/04 05:00:47 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/04 21:57:05 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ void	parse_line(char *line, t_map *map, size_t row_i)
 			i++;
 		if (!ft_isdigit(line[i]) && line[i] != '-')
 			exit (1);
-		map->points[row_i][col_i] = init_vect((double)col_i - (double)map->width / 2.0,
-				(double)row_i - (double)map->height / 2.0, ft_iatoi(line, &i));
+		map->points[row_i][col_i] = init_vect(col_i - map->width / 2.0,
+				row_i - map->height / 2.0, ft_iatoi(line, &i));
 		while (line[i] && line[i] != ' ')
 			i++;
 		col_i++;
