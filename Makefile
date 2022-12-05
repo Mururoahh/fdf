@@ -7,7 +7,10 @@ NAME			=	fdf
 SRCS			=	main.c			fdf.c		\
 					draw_line.c		draw_map.c	\
 					matrices.c		vector.c	\
-					keys.c
+					keys.c	\
+					$(addprefix $(DIR_UTILS), $(UTILS))	\
+					$(addprefix $(DIR_GNL), $(GNL))		\
+					$(addprefix $(DIR_PARS), $(PARS))
 
 UTILS			=	ft_iatoi.c		ft_isdigit.c
 
@@ -15,14 +18,12 @@ PARS			=	parser.c
 
 GNL				=	get_next_line.c	get_next_line_utils.c
 
-FILES			=	$(SRCS)								\
-					$(addprefix $(DIR_UTILS), $(UTILS))	\
-					$(addprefix $(DIR_GNL), $(GNL))		\
-					$(addprefix $(DIR_PARS), $(PARS))
-
 HEAD			=	fdf.h
 
-OBJS			=	$(FILES:%.c=$(DIR_OBJS)%.o)
+OBJS			=	$(SRCS:%.c=$(DIR_OBJS)%.o)
+
+DEPS			= 	$(OBJS:.o=.d)
+
 
 #DIRECTORIES
 
@@ -38,7 +39,7 @@ DIR_MLX			=	mlx/
 
 DIR_HEAD		=	includes/
 
-DIR_OBJS		=	.objs/
+DIR_OBJS		=	.build/
 
 DIR				=	$(DIR_UTILS) $(DIR_GNL) $(DIR_PARS)
 
@@ -54,9 +55,15 @@ PATH_HEAD		=	$(addprefix $(DIR_HEAD), $(HEAD))
 
 CC				=	cc
 
-CFLAGS			=	-Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS			=	-Wall -Wextra -Werror
+
+DFLAGS			=	-Wall -Wextra -Werror -g3
+
+DEBUG			=	false
 
 MLXFLAG			=	-Lmlx -lmlx -framework OpenGL -framework Appkit
+
+DEPS_FLAGS		=	-MMD -MP
 
 #COMMANDS
 
@@ -68,24 +75,33 @@ LDB				=	lldb
 
 #*** RULES ***#
 
-all				:	$(NAME)
+all				:	$(DIR_OBJS) $(NAME)
 
 run				:	all
 					./fdf test_maps/42.fdf
 
-$(NAME)			:	$(OBJS) $(PATH_HEAD) Makefile
-					$(CC) $(CFLAGS) $(MLXFLAG) $(OBJS) -o $(NAME)
+-include		$(DEPS)
 
-debug			:	$(OBJS) $(PATH_HEAD) Makefile
-					$(CC) $(CFLAGS) $(MLXFLAG) $(OBJS) -o $(NAME)
-					$(LDB) ./$(NAME)
+$(NAME)			:	$(OBJS)
+ifeq ($(DEBUG),true)
+	$(CC) $(DFLAGS) $(OBJS) -o $(NAME) $(MLXFLAG)
+else
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLXFLAG)
+endif
 
-lldb			:	$(LDB) ./$(NAME)
+debug			:
+				$(MAKE) -C . re DEBUG=true
+				$(LDB)
+				$(MAKE) -C . clean
 
 #COMPIL
 
-$(DIR_OBJS)%.o	:	$(DIR_SRCS)%.c $(PATH_HEAD) Makefile | $(DIR_OBJS)
-					$(CC) $(CFLAGS) -I$(DIR_HEAD) -I$(DIR_MLX) -g3 -c $< -o $@
+$(DIR_OBJS)%.o	:	$(DIR_SRCS)%.c
+ifeq ($(DEBUG),true)
+	$(CC) $(DFLAGS) $(DEPS_FLAGS) -I$(DIR_HEAD) -c $< -o $@ -I$(DIR_MLX)
+else
+	$(CC) $(CFLAGS) $(DEPS_FLAGS) -I$(DIR_HEAD) -c $< -o $@ -I$(DIR_MLX)
+endif
 
 $(DIR_OBJS)		:
 					$(MKDIR) $(ARB_OBJS)
@@ -98,6 +114,6 @@ clean			:
 fclean			:	clean
 					$(RM) $(NAME)
 
-re				:
-					make fclean
-					make all
+re				:	
+					$(MAKE) -C . fclean
+					$(MAKE) -C . all
