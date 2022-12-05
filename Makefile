@@ -10,13 +10,16 @@ SRCS			=	main.c			fdf.c		\
 					keys.c	\
 					$(addprefix $(DIR_UTILS), $(UTILS))	\
 					$(addprefix $(DIR_GNL), $(GNL))		\
-					$(addprefix $(DIR_PARS), $(PARS))
-
-UTILS			=	ft_iatoi.c		ft_isdigit.c
+					$(addprefix $(DIR_PARS), $(PARS))	\
+					$(addprefix $(DIR_CLIP), $(CLIP))
 
 PARS			=	parser.c
 
+CLIP			=	clipping.c
+
 GNL				=	get_next_line.c	get_next_line_utils.c
+
+UTILS			=	ft_iatoi.c		ft_isdigit.c
 
 HEAD			=	fdf.h
 
@@ -31,9 +34,11 @@ DIR_SRCS		=	srcs/
 
 DIR_PARS		=	parser/
 
-DIR_UTILS		=	utils/
+DIR_CLIP		=	clipping/
 
 DIR_GNL			=	gnl/
+
+DIR_UTILS		=	utils/
 
 DIR_MLX			=	mlx/
 
@@ -41,7 +46,7 @@ DIR_HEAD		=	includes/
 
 DIR_OBJS		=	.build/
 
-DIR				=	$(DIR_UTILS) $(DIR_GNL) $(DIR_PARS)
+DIR				=	$(DIR_UTILS) $(DIR_GNL) $(DIR_PARS) $(DIR_CLIP)
 
 #ARBORESCENCE
 
@@ -57,7 +62,7 @@ CC				=	cc
 
 CFLAGS			=	-Wall -Wextra -Werror
 
-DFLAGS			=	-Wall -Wextra -Werror -g3
+DFLAGS			=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 DEBUG			=	false
 

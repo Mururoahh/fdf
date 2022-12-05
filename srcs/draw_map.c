@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 03:41:05 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 17:27:24 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	get_projected_map(t_map *map, t_trans trans, t_rot rot)
 {
 	t_matrix	world_mat;
 	t_matrix	proj_mat;
+	double		tmp_z;
 	size_t		i;
 	size_t		j;
 
@@ -46,8 +47,10 @@ void	get_projected_map(t_map *map, t_trans trans, t_rot rot)
 		while (j < map->width)
 		{
 			map->points[i][j] = apply_matrix(map->points[i][j], world_mat);
+			tmp_z = map->points[i][j].z;
 			map->points[i][j] = apply_matrix(map->points[i][j], proj_mat);
 			map->points[i][j] = div_vect(map->points[i][j], map->points[i][j].w);
+			map->points[i][j].z = tmp_z;
 			map->points[i][j].x += 1.0;
 			map->points[i][j].y += 1.0;
 			map->points[i][j].x *= ((0.5 * RES_X));
