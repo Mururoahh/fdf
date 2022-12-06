@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:55:53 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 17:32:03 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 22:37:49 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	draw_line(t_vec_3d p_start, t_vec_3d p_end, t_data *imgdata)
 
 	if (p_start.x > p_end.x)
 		return (draw_line(p_end, p_start, imgdata));
-	if (line_clipping(&p_start, &p_end) == 0 || p_start.z < .1 || p_end.z < .1)
+	if (!line_clipping(&p_start, &p_end))
 		return ;
 	coef = (p_end.y - p_start.y) / (p_end.x - p_start.x);
 	if (coef > -0.5 && coef < 0.5)
