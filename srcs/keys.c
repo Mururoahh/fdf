@@ -6,12 +6,30 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 03:39:00 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 17:36:09 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/07 02:30:10 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "keys.h"
+
+void	elevate_map(t_map *map, double val)
+{
+	size_t i;
+	size_t j;
+
+	i = 0;
+	while (i < map->height)
+	{
+		j = 0;
+		while (j < map->width)
+		{
+			map->map[i][j].z *= val;
+			j++;
+		}
+		i++;
+	}
+}
 
 int	key_hook(int keycode, t_fdf *fdf)
 {
@@ -36,6 +54,12 @@ int	key_hook(int keycode, t_fdf *fdf)
 		fdf->rot.roll += 0.1;
 	else if (keycode == KEY_E)
 		fdf->rot.roll -= 0.1;
+	else if (keycode == KEY_Z)
+		elevate_map(&fdf->map, 1.1);
+	else if (keycode == KEY_X)
+		elevate_map(&fdf->map, 0.9);
+	else if (keycode == KEY_C)
+		fdf->draw_style = fdf->draw_style == 0;
 	else if (keycode == KEY_SPACE)
 		fdf->trans.z -= 1.3;
 	else if (keycode == KEY_SHIFT)
