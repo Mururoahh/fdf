@@ -60,7 +60,7 @@ PATH_HEAD		=	$(addprefix $(DIR_HEAD), $(HEAD))
 
 CC				=	cc
 
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -O3
 
 DFLAGS			=	-Wall -Wextra -Werror -g3 -fsanitize=address
 

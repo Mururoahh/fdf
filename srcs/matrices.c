@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:02:12 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 05:48:27 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/06 20:26:22 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,15 @@ t_matrix	multiply_matrix(t_matrix m1, t_matrix m2)
 	return (res);
 }
 
-t_matrix	get_projection_matrix(void)
+t_matrix	get_projection_matrix(t_proj proj)
 {
 	t_matrix	matrix;
-	double		z_near;
-	double		z_far;
-	double		fov;
-	double		aspect_ratio;
-	double		fov_rad;
 
-	z_near = 0.1;
-	z_far = 1000.0;
-	fov = 90.0;
-	aspect_ratio = (float)RES_Y / (float)RES_X;
-	fov_rad = 1.0 / tan(fov * 0.5 / 180.0 * M_PI);
 	bzero(&matrix, sizeof(t_matrix));
-	matrix.m[0][0] = aspect_ratio * fov_rad;
-	matrix.m[1][1] = fov_rad;
-	matrix.m[2][2] = z_far / (z_far - z_near);
-	matrix.m[3][2] = (-z_far * z_near) / (z_far - z_near);
+	matrix.m[0][0] = proj.aspect_ratio * proj.fov_rad;
+	matrix.m[1][1] = proj.fov_rad;
+	matrix.m[2][2] = proj.z_ratio;
+	matrix.m[3][2] = -proj.z_near * proj.z_ratio;
 	matrix.m[2][3] = 1.0;
 	return (matrix);
 }
