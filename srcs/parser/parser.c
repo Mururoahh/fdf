@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 23:22:41 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 23:49:33 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	parse_line(char *line, t_map *map, size_t row_i)
 	map->map[row_i] = malloc(sizeof(t_vec_3d) * (line_size));
 	if (map->map[row_i] == NULL)
 		exit (1);
-		//ERRNO
 	if (map->width == 0)
 		map->width = line_size;
 	else if (map->width != line_size)
@@ -78,7 +77,6 @@ t_map	parse_map(char *filename)
 
 	line_head = map_to_list(filename);
 	if (line_head == NULL)
-	//ERRNO
 		exit(1);
 	map.height = lstrev(&line_head);
 	map.map = malloc(map.height * sizeof(int *));

@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 18:35:09 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 23:32:35 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 # define RES_X 1920
 # define RES_Y 1080
-# define COLOR 0xffffff
+# define COLOR 0xff0000
 
 typedef struct s_data
 {
@@ -38,12 +38,6 @@ typedef struct s_data
 	int		x_size;
 	int		y_size;
 }			t_data;
-
-typedef struct s_imgdata
-{
-	t_data	*img;
-	int		color;
-}			t_imgdata;
 
 typedef struct s_vec_3d
 {

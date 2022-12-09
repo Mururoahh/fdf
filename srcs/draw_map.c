@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 17:39:52 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 23:53:59 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,15 @@ t_map	map_cpy(t_map map)
 	size_t	j;
 
 	cpy.map = malloc(map.height * sizeof(t_vec_3d *));
+	if (cpy.map == NULL)
+		exit(1);
 	i = 0;
 	while (i < map.height)
+	{
 		cpy.map[i++] = malloc(map.width * sizeof(t_vec_3d));
+		if (cpy.map == NULL)
+			exit(1);
+	}
 	i = 0;
 	while (i < map.height)
 	{
