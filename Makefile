@@ -13,7 +13,7 @@ SRCS			=	main.c			fdf.c		\
 					$(addprefix $(DIR_PARS), $(PARS))	\
 					$(addprefix $(DIR_CLIP), $(CLIP))
 
-PARS			=	parser.c
+PARS			=	parser.c	parser_utils.c
 
 CLIP			=	clipping.c
 

@@ -6,11 +6,12 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/07 00:09:37 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 23:22:41 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "parser.h"
 #include "ft_utils.h"
 
 int	get_line_size(char *line)
@@ -24,74 +25,16 @@ int	get_line_size(char *line)
 	{
 		while (line[i] == ' ')
 			i++;
-		if (ft_isdigit(line[i]) || line[i] == '-')
+		if ((ft_isdigit(line[i]) || line[i] == '-'))
 		{
 			line_size++;
-			while (ft_isdigit(line[i]) || line[i] == '-')
+			while ((ft_isdigit(line[i]) || line[i] == '-'))
 				i++;
 		}
 		while (line[i] && line[i] != ' ')
 			i++;
 	}
 	return (line_size);
-}
-
-t_map_line	*push_map_line(t_map_line **head, char *line)
-{
-	t_map_line	*elem;
-
-	elem = malloc(sizeof(t_map_line));
-	if (elem == NULL)
-		return (NULL);
-	elem->line = line;
-	elem->next = *head;
-	*head = elem;
-	return (elem);
-}
-
-t_map_line	*map_to_list(char *filename)
-{
-	t_map_line	*head;
-	int			fd;
-	char		*line;
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (NULL);
-	head = NULL;
-	line = get_next_line(fd);
-	while (line)
-	{
-		if (push_map_line(&head, line) == NULL)
-			return (NULL);
-		line = get_next_line(fd);
-	}
-	if (close(fd) == -1)
-		return (NULL);
-	return (head);
-}
-
-size_t	lstrev(t_map_line **head)
-{
-	t_map_line	*prev;
-	t_map_line	*current;
-	t_map_line	*next;
-	size_t		count;
-
-	current = *head;
-	next = NULL;
-	prev = NULL;
-	count = 0;
-	while (current)
-	{
-		next = current->next;
-		current->next = prev;
-		prev = current;
-		current = next;
-		count++;
-	}
-	*head = prev;
-	return (count);
 }
 
 void	parse_line(char *line, t_map *map, size_t row_i)
@@ -115,19 +58,21 @@ void	parse_line(char *line, t_map *map, size_t row_i)
 	{
 		while (line[i] == ' ')
 			i++;
-		if (!ft_isdigit(line[i]) && line[i] != '-')
-			exit (1);
-		map->map[row_i][col_i] = init_vect(col_i - map->width / 2.0,
-				row_i - map->height / 2.0, ft_iatoi(line, &i));
+		if (ft_isdigit(line[i]) || line[i] == '-')
+		{
+			map->map[row_i][col_i] = init_vect(col_i - map->width / 2.0,
+					row_i - map->height / 2.0, ft_iatoi(line, &i));
+			col_i++;
+		}
 		while (line[i] && line[i] != ' ')
 			i++;
-		col_i++;
 	}
 }
 
 t_map	parse_map(char *filename)
 {
 	t_map_line	*line_head;
+	t_map_line	*next;
 	size_t		row_i;
 	t_map		map;
 
@@ -143,8 +88,11 @@ t_map	parse_map(char *filename)
 	row_i = 0;
 	while (line_head)
 	{
+		next = line_head->next;
 		parse_line(line_head->line, &map, row_i);
-		line_head = line_head->next;
+		free(line_head->line);
+		free(line_head);
+		line_head = next;
 		row_i++;
 	}
 	return (map);
