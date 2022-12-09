@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/07 00:04:11 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 18:35:09 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@
 
 # define RES_X 1920
 # define RES_Y 1080
-# define ROTATION 45
-# define POINT_DISTANCE 60
+# define COLOR 0xffffff
 
 typedef struct s_data
 {
@@ -53,12 +52,6 @@ typedef struct s_vec_3d
 	float	z;
 	float	w;
 }	t_vec_3d;
-
-typedef struct s_map_line
-{
-	char				*line;
-	struct s_map_line	*next;
-}						t_map_line;
 
 typedef struct s_map
 {
@@ -102,6 +95,8 @@ typedef struct s_fdf
 	void	*win;
 	t_data	img;
 	t_map	map;
+	double	z_max;
+	double	z_min;
 	int		draw_style;
 	t_trans	trans;
 	t_rot	rot;
@@ -111,7 +106,7 @@ typedef struct s_fdf
 
 t_map		parse_map(char *filename);
 void		put_pixel(t_data *data, int x, int y, int color);
-void		draw_line(t_vec_3d p_start, t_vec_3d p_end, t_data *imgdata);
+void		draw_line(t_vec_3d p_start, t_vec_3d p_end, t_fdf *fdf);
 void		draw_map(t_fdf fdf);
 char		*get_next_line(int fd);
 t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);

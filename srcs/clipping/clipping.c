@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 06:35:29 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 12:40:34 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/09 19:26:23 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ t_region	get_region(t_vec_3d vec)
 	t_region	region;
 
 	region = INSIDE;
-	if (vec.y > RES_Y)
+	if (vec.y >= RES_Y)
 		region |= TOP;
 	else if (vec.y < 0)
 		region |= BOTTOM;
-	if (vec.x > RES_X)
+	if (vec.x >= RES_X)
 		region |= RIGHT;
 	else if (vec.x < 0)
 		region |= LEFT;
