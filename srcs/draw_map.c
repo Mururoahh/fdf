@@ -6,21 +6,38 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 23:53:59 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 00:42:17 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	get_projected_map(t_map *map, t_trans trans, t_rot rot, t_proj proj)
+void	print_mat(t_matrix mat)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			printf("%.1f ", mat.m[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
+void	get_projected_map(t_map *map, t_fdf fdf)
 {
 	t_matrix	world_mat;
-	t_matrix	proj_mat;
 	size_t		i;
 	size_t		j;
 
-	world_mat = get_world_matrix(trans, rot);
-	proj_mat = get_projection_matrix(proj);
+	world_mat = get_world_matrix(fdf.trans, fdf.rot);
 	i = 0;
 	while (i < map->height)
 	{
@@ -28,13 +45,20 @@ void	get_projected_map(t_map *map, t_trans trans, t_rot rot, t_proj proj)
 		while (j < map->width)
 		{
 			map->map[i][j] = apply_matrix(map->map[i][j], world_mat);
-			map->map[i][j] = apply_matrix(map->map[i][j], proj_mat);
-			map->map[i][j].x /= map->map[i][j].w;
-			map->map[i][j].y /= map->map[i][j].w;
-			map->map[i][j].x += 1.0;
-			map->map[i][j].y += 1.0;
-			map->map[i][j].x *= ((0.5 * RES_X));
-			map->map[i][j].y *= ((0.5 * RES_Y));
+			if (fdf.proj_style == 1)
+			{
+				map->map[i][j] = apply_matrix(map->map[i][j], get_perspective_matrix(fdf.proj));
+				map->map[i][j].x /= map->map[i][j].w;
+				map->map[i][j].y /= map->map[i][j].w;
+				map->map[i][j].x = (map->map[i][j].x + 1.0) * ((0.5 * RES_X));
+				map->map[i][j].y = (map->map[i][j].y + 1.0) * ((0.5 * RES_Y));
+			}
+			else
+			{
+				map->map[i][j] = apply_matrix(map->map[i][j], get_scale_matrix(1000 / fdf.trans.z));
+				map->map[i][j].x = (map->map[i][j].x + 1.0) + ((0.5 * RES_X));
+				map->map[i][j].y = (map->map[i][j].y + 1.0) + ((0.5 * RES_Y));
+			}
 			map->map[i][j].x = (int)(map->map[i][j].x + 0.5);
 			map->map[i][j].y = (int)(map->map[i][j].y + 0.5);
 			j++;
@@ -106,7 +130,7 @@ void	draw_points(t_map map, t_fdf fdf)
 			x = map.map[i][j].x;
 			y = map.map[i][j].y;
 			z = map.map[i][j].z;
-			if (x >= 0 && x < RES_X && y >= 0 && y < RES_Y && z > 0)
+			if (x >= 0 && x < RES_X && y >= 0 && y < RES_Y && z > .1)
 				put_pixel(&fdf.img, x, y, COLOR);
 			j++;
 		}
@@ -121,7 +145,7 @@ void	draw_map(t_fdf fdf)
 	t_map		map;
 
 	map = map_cpy(fdf.map);
-	get_projected_map(&map, fdf.trans, fdf.rot, fdf.proj);
+	get_projected_map(&map, fdf);
 	i = 0;
 	if (fdf.draw_style == 1)
 	{

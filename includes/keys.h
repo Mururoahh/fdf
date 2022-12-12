@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 03:41:13 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/07 00:11:34 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/10 04:42:20 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ enum
 	KEY_Z = 6,
 	KEY_X = 7,
 	KEY_C = 8,
+	KEY_O = 31,
+	KEY_P = 35,
 	KEY_DOWN = 123,
 	KEY_UP = 124,
 	KEY_RIGHT = 125,

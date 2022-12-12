@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 23:32:35 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/12 22:41:48 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,15 @@ typedef struct s_proj
 
 typedef struct s_fdf
 {
-	void	*mlx;
-	void	*win;
-	t_data	img;
-	t_map	map;
-	double	z_max;
-	double	z_min;
-	int		draw_style;
-	t_trans	trans;
-	t_rot	rot;
-	t_proj	proj;
+	void		*mlx;
+	void		*win;
+	t_data		img;
+	t_map		map;
+	int			draw_style;
+	t_trans		trans;
+	t_rot		rot;
+	t_proj		proj;
+	int			proj_style;
 
 }				t_fdf;
 
@@ -112,9 +111,10 @@ t_vec_3d	mul_vect(t_vec_3d v1, double k);
 double		vect_dot_product(t_vec_3d v1, t_vec_3d v2);
 t_vec_3d	vect_normalise(t_vec_3d v);
 t_vec_3d	vect_cross_product(t_vec_3d v1, t_vec_3d v2);
-t_matrix	get_projection_matrix(t_proj proj);
+t_matrix	get_perspective_matrix(t_proj proj);
+t_matrix	get_isometric_matrix(t_proj proj);
+t_matrix	get_scale_matrix(double scale_factor);
 t_matrix	get_world_matrix(t_trans trans, t_rot rot);
-t_matrix	get_camera_matrix(t_vec_3d camera);
 t_matrix	multiply_matrix(t_matrix m1, t_matrix m2);
 t_matrix	inverse_matrix(t_matrix m);
 void		bzero(void *ptr, size_t size);
