@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   draw_map.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/09 18:22:58 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 04:45:25 by hferraud         ###   ########lyon.fr   */
+/*   Created: 2022/12/13 01:37:02 by hferraud          #+#    #+#             */
+/*   Updated: 2022/12/13 05:50:10 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef DRAW_MAP_H
+# define DRAW_MAP_H
 
 # include "fdf.h"
 
-typedef struct s_map_line
-{
-	char				*line;
-	struct s_map_line	*next;
-}						t_map_line;
-
-t_map		parse_map(char *filename);
-t_map_line	*map_to_list(char *filename);
-size_t		lstrev(t_map_line **head);
+t_map	map_cpy(t_map map);
+void	free_map(t_map map);
+void	get_projected_map(t_map *map, t_fdf fdf);
+void	clear_img(t_data *img);
+void	draw_line(t_vec_3d p_start, t_vec_3d p_end, t_fdf *fdf);
+void	draw_points(t_map map, t_fdf fdf);
+void	draw_map(t_fdf fdf);
 
 #endif

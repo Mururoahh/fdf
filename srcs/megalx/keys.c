@@ -6,17 +6,18 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 03:39:00 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/12 20:09:45 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 05:49:26 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "keys.h"
+#include "draw_map.h"
 
 void	elevate_map(t_map *map, double val)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	while (i < map->height)

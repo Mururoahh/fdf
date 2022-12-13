@@ -1,35 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_map.c                                         :+:      :+:    :+:   */
+/*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/26 16:05:07 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 00:42:17 by hferraud         ###   ########lyon.fr   */
+/*   Created: 2022/12/13 01:34:55 by hferraud          #+#    #+#             */
+/*   Updated: 2022/12/13 01:39:37 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
-
-void	print_mat(t_matrix mat)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < 4)
-	{
-		j = 0;
-		while (j < 4)
-		{
-			printf("%.1f ", mat.m[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
+#include "draw_map.h"
 
 void	get_projected_map(t_map *map, t_fdf fdf)
 {
@@ -111,60 +92,4 @@ void	free_map(t_map map)
 		i++;
 	}
 	free(map.map);
-}
-
-void	draw_points(t_map map, t_fdf fdf)
-{
-	size_t		i;
-	size_t		j;
-	double		x;
-	double		y;
-	double		z;
-
-	i = 0;
-	while (i < map.height)
-	{
-		j = 0;
-		while (j < map.width)
-		{
-			x = map.map[i][j].x;
-			y = map.map[i][j].y;
-			z = map.map[i][j].z;
-			if (x >= 0 && x < RES_X && y >= 0 && y < RES_Y && z > .1)
-				put_pixel(&fdf.img, x, y, COLOR);
-			j++;
-		}
-		i++;
-	}
-}
-
-void	draw_map(t_fdf fdf)
-{
-	size_t		i;
-	size_t		j;
-	t_map		map;
-
-	map = map_cpy(fdf.map);
-	get_projected_map(&map, fdf);
-	i = 0;
-	if (fdf.draw_style == 1)
-	{
-		while (i < map.height)
-		{
-			j = 0;
-			while (j < map.width)
-			{
-				if (i > 0)
-					draw_line(map.map[i][j], map.map[i - 1][j], &fdf);
-				if (j > 0)
-					draw_line(map.map[i][j], map.map[i][j - 1], &fdf);
-				j++;
-			}
-			i++;
-		}
-	}
-	else
-		draw_points(map, fdf);
-	free_map(map);
-	mlx_put_image_to_window(fdf.mlx, fdf.win, fdf.img.img, 0, 0);
 }

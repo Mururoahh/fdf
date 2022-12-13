@@ -6,11 +6,11 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 12:55:45 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/03 12:46:49 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 05:20:26 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "vector.h"
 
 t_vec_3d	init_vect(double x, double y, double z)
 {

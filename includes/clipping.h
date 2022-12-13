@@ -6,12 +6,15 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 06:38:57 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/05 17:28:12 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 05:31:37 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIPPING_H
 # define CLIPPING_H
+
+# include "fdf.h"
+# include "vector.h"
 
 typedef int	t_region;
 

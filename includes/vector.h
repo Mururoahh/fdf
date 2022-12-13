@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   vector.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/09 18:22:58 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 04:45:25 by hferraud         ###   ########lyon.fr   */
+/*   Created: 2022/12/13 04:40:16 by hferraud          #+#    #+#             */
+/*   Updated: 2022/12/13 05:19:35 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef VECTOR_H
+# define VECTOR_H
 
-# include "fdf.h"
-
-typedef struct s_map_line
+typedef struct s_vec_3d
 {
-	char				*line;
-	struct s_map_line	*next;
-}						t_map_line;
+	float	x;
+	float	y;
+	float	z;
+	float	w;
+}	t_vec_3d;
 
-t_map		parse_map(char *filename);
-t_map_line	*map_to_list(char *filename);
-size_t		lstrev(t_map_line **head);
+t_vec_3d	init_vect(double x, double y, double z);
+t_vec_3d	add_vect(t_vec_3d v1, t_vec_3d v2);
+t_vec_3d	sub_vect(t_vec_3d v1, t_vec_3d v2);
+t_vec_3d	div_vect(t_vec_3d v1, double k);
+t_vec_3d	mul_vect(t_vec_3d v1, double k);
 
 #endif

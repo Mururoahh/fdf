@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/09 18:22:58 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 04:45:25 by hferraud         ###   ########lyon.fr   */
+/*   Created: 2022/12/13 04:42:32 by hferraud          #+#    #+#             */
+/*   Updated: 2022/12/13 04:44:12 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_utils.h"
 
-# include "fdf.h"
-
-typedef struct s_map_line
+void	ft_bzero(void *ptr, size_t size)
 {
-	char				*line;
-	struct s_map_line	*next;
-}						t_map_line;
-
-t_map		parse_map(char *filename);
-t_map_line	*map_to_list(char *filename);
-size_t		lstrev(t_map_line **head);
-
-#endif
+	while (size--)
+		((unsigned char *)ptr)[size] = 0;
+}

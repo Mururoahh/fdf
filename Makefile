@@ -5,21 +5,33 @@ NAME			=	fdf
 #FILES
 
 SRCS			=	main.c			fdf.c		\
-					draw_line.c		draw_map.c	\
-					matrices.c		vector.c	\
-					keys.c	\
-					$(addprefix $(DIR_UTILS), $(UTILS))	\
-					$(addprefix $(DIR_GNL), $(GNL))		\
-					$(addprefix $(DIR_PARS), $(PARS))	\
-					$(addprefix $(DIR_CLIP), $(CLIP))
+					$(addprefix $(DIR_UTILS), $(UTILS))		\
+					$(addprefix $(DIR_GNL), $(GNL))			\
+					$(addprefix $(DIR_PARS), $(PARS))		\
+					$(addprefix $(DIR_DRAW), $(DRAW))		\
+					$(addprefix $(DIR_CLIP), $(CLIP))		\
+					$(addprefix $(DIR_MEGALX), $(MEGALX))	\
+					$(addprefix $(DIR_MATRIX), $(MATRIX))	\
+					$(addprefix $(DIR_VECTOR), $(VECTOR))	\
+
+MEGALX			=	megalx_utils.c	keys.c
 
 PARS			=	parser.c	parser_utils.c
 
 CLIP			=	clipping.c
 
+DRAW			=	draw_map.c	draw_utils.c	\
+					drawer.c
+
+MATRIX			=	projection_matrices.c	world_matrices.c	\
+					matrices_utils.c
+
+VECTOR			=	vector.c
+
 GNL				=	get_next_line.c	get_next_line_utils.c
 
-UTILS			=	ft_iatoi.c		ft_isdigit.c
+UTILS			=	ft_iatoi.c		ft_isdigit.c	\
+					ft_bzero.c
 
 HEAD			=	fdf.h
 
@@ -36,7 +48,15 @@ DIR_PARS		=	parser/
 
 DIR_CLIP		=	clipping/
 
+DIR_DRAW		=	draw_map/
+
+DIR_MATRIX		=	matrices/
+
+DIR_VECTOR		=	vector/
+
 DIR_GNL			=	gnl/
+
+DIR_MEGALX		=	megalx/
 
 DIR_UTILS		=	utils/
 
@@ -46,7 +66,7 @@ DIR_HEAD		=	includes/
 
 DIR_OBJS		=	.build/
 
-DIR				=	$(DIR_UTILS) $(DIR_GNL) $(DIR_PARS) $(DIR_CLIP)
+DIR				=	$(DIR_UTILS) $(DIR_GNL) $(DIR_PARS) $(DIR_CLIP) $(DIR_DRAW) $(DIR_MEGALX) $(DIR_MATRIX) $(DIR_VECTOR)
 
 #ARBORESCENCE
 

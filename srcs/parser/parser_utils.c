@@ -6,11 +6,13 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 18:20:30 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 18:21:47 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 05:36:28 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "parser.h"
+#include "get_next_line.h"
 
 t_map_line	*push_map_line(t_map_line **head, char *line)
 {

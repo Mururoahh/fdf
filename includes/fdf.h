@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/12 22:41:48 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/13 05:53:49 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 # define FDF_H
 
-# include <math.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+
 # include "../mlx/mlx.h"
 # include "ft_utils.h"
+# include "matrices.h"
+# include "vector.h"
 
 # include <stdio.h>
 
@@ -39,49 +41,12 @@ typedef struct s_data
 	int		y_size;
 }			t_data;
 
-typedef struct s_vec_3d
-{
-	float	x;
-	float	y;
-	float	z;
-	float	w;
-}	t_vec_3d;
-
 typedef struct s_map
 {
 	size_t		height;
 	size_t		width;
 	t_vec_3d	**map;
 }				t_map;
-
-typedef struct s_matrix
-{
-	float	m[4][4];
-}			t_matrix;
-
-typedef struct s_trans
-{
-	double	x;
-	double	y;
-	double	z;
-}			t_trans;
-
-typedef struct s_rot
-{
-	double	pitch;
-	double	yaw;
-	double	roll;
-}			t_rot;
-
-typedef struct s_proj
-{
-	double	z_near;
-	double	z_far;
-	double	z_ratio;
-	double	fov;
-	double	aspect_ratio;
-	double	fov_rad;
-}			t_proj;
 
 typedef struct s_fdf
 {
@@ -97,27 +62,7 @@ typedef struct s_fdf
 
 }				t_fdf;
 
-t_map		parse_map(char *filename);
-void		put_pixel(t_data *data, int x, int y, int color);
-void		draw_line(t_vec_3d p_start, t_vec_3d p_end, t_fdf *fdf);
-void		draw_map(t_fdf fdf);
-char		*get_next_line(int fd);
-t_vec_3d	apply_matrix(t_vec_3d v, t_matrix m);
-t_vec_3d	init_vect(double x, double y, double z);
-t_vec_3d	add_vect(t_vec_3d v1, t_vec_3d v2);
-t_vec_3d	sub_vect(t_vec_3d v1, t_vec_3d v2);
-t_vec_3d	div_vect(t_vec_3d v1, double k);
-t_vec_3d	mul_vect(t_vec_3d v1, double k);
-double		vect_dot_product(t_vec_3d v1, t_vec_3d v2);
-t_vec_3d	vect_normalise(t_vec_3d v);
-t_vec_3d	vect_cross_product(t_vec_3d v1, t_vec_3d v2);
-t_matrix	get_perspective_matrix(t_proj proj);
-t_matrix	get_isometric_matrix(t_proj proj);
-t_matrix	get_scale_matrix(double scale_factor);
-t_matrix	get_world_matrix(t_trans trans, t_rot rot);
-t_matrix	multiply_matrix(t_matrix m1, t_matrix m2);
-t_matrix	inverse_matrix(t_matrix m);
-void		bzero(void *ptr, size_t size);
-void		clear_img(t_data *img);
+void	init_fdf(t_fdf *fdf, char *map_name);
+void	start_fdf(t_fdf *fdf);
 
 #endif
