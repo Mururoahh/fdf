@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 12:49:26 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/09 23:49:33 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/14 09:41:19 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,8 @@ int	get_line_size(char *line)
 	return (line_size);
 }
 
-void	parse_line(char *line, t_map *map, size_t row_i)
+void	init_map_line(t_map *map, size_t row_i, size_t line_size)
 {
-	size_t	col_i;
-	size_t	line_size;
-	size_t	i;
-
-	line_size = get_line_size(line);
 	map->map[row_i] = malloc(sizeof(t_vec_3d) * (line_size));
 	if (map->map[row_i] == NULL)
 		exit (1);
@@ -51,6 +46,16 @@ void	parse_line(char *line, t_map *map, size_t row_i)
 		map->width = line_size;
 	else if (map->width != line_size)
 		exit (1);
+}
+
+void	parse_line(char *line, t_map *map, size_t row_i)
+{
+	size_t	col_i;
+	size_t	line_size;
+	size_t	i;
+
+	line_size = get_line_size(line);
+	init_map_line(map, row_i, line_size);
 	col_i = 0;
 	i = 0;
 	while (line[i])

@@ -4,7 +4,7 @@ NAME			=	fdf
 
 #FILES
 
-SRCS			=	main.c			fdf.c		\
+SRCS			=	main.c	fdf.c	\
 					$(addprefix $(DIR_UTILS), $(UTILS))		\
 					$(addprefix $(DIR_GNL), $(GNL))			\
 					$(addprefix $(DIR_PARS), $(PARS))		\

@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 05:53:49 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/14 08:19:27 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 # include <fcntl.h>
 
 # include "../mlx/mlx.h"
-# include "ft_utils.h"
+# include "megalx.h"
 # include "matrices.h"
 # include "vector.h"
+# include "ft_utils.h"
 
 # include <stdio.h>
 
@@ -29,17 +30,13 @@
 # define RES_Y 1080
 # define COLOR 0xff0000
 
-typedef struct s_data
+enum
 {
-	void	*img;
-	void	*addr;
-	int		bits_per_pixel;
-	int		bits_ratio;
-	int		line_length;
-	int		endian;
-	int		x_size;
-	int		y_size;
-}			t_data;
+	DRAW_POINT = 0,
+	DRAW_LINE = 1,
+	PROJ_ISO = 0,
+	PROJ_PERSP = 1,
+};
 
 typedef struct s_map
 {

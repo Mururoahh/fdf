@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:02:12 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 05:54:01 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/14 08:55:32 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ t_matrix	get_rotation_z_matrix(double theta)
 	return (matrix);
 }
 
-t_matrix	get_world_matrix(t_trans trans, t_rot rot)
+t_matrix	get_world_matrix(t_trans tran, t_rot rot)
 {
 	t_matrix	mat;
 
 	mat = get_rotation_x_matrix(rot.pitch);
 	mat = multiply_matrix(mat, get_rotation_y_matrix(rot.yaw));
 	mat = multiply_matrix(mat, get_rotation_z_matrix(rot.roll));
-	mat = multiply_matrix(mat, get_translation_matrix(trans.x, trans.y, trans.z));
+	mat = multiply_matrix(mat, get_translation_matrix(tran.x, tran.y, tran.z));
 	return (mat);
 }

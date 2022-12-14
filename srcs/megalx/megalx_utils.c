@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   megalx.c                                           :+:      :+:    :+:   */
+/*   megalx_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 01:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 04:24:50 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/14 08:09:49 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fdf.h"
 #include "megalx.h"
 
 void	init_img(t_data *img, void *mlx, int size_x, int size_y)

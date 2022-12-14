@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:55:53 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/13 05:45:39 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/14 08:22:41 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,6 @@ void	clear_img(t_data *img)
 		while (j < RES_Y)
 		{
 			put_pixel(img, i, j, 0x000000);
-			j++;
-		}
-		i++;
-	}
-}
-
-void	draw_points(t_map map, t_fdf fdf)
-{
-	size_t		i;
-	size_t		j;
-	double		x;
-	double		y;
-	double		z;
-
-	i = 0;
-	while (i < map.height)
-	{
-		j = 0;
-		while (j < map.width)
-		{
-			x = map.map[i][j].x;
-			y = map.map[i][j].y;
-			z = map.map[i][j].z;
-			if (x >= 0 && x < RES_X && y >= 0 && y < RES_Y && z > .1)
-				put_pixel(&fdf.img, x, y, COLOR);
 			j++;
 		}
 		i++;
