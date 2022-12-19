@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 07:56:51 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/14 08:19:27 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/19 06:38:03 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # define FDF_H
 
 # include <stdlib.h>
-# include <unistd.h>
 # include <fcntl.h>
 
 # include "../mlx/mlx.h"
@@ -23,8 +22,6 @@
 # include "matrices.h"
 # include "vector.h"
 # include "ft_utils.h"
-
-# include <stdio.h>
 
 # define RES_X 1920
 # define RES_Y 1080

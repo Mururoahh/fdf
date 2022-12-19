@@ -100,7 +100,9 @@ LDB				=	lldb
 
 #*** RULES ***#
 
-all				:	$(DIR_OBJS) $(NAME)
+all				:	$(DIR_OBJS)
+					$(MAKE) -C mlx
+					$(MAKE) -j $(NAME)
 
 run				:	all
 					./fdf test_maps/42.fdf
@@ -134,6 +136,7 @@ $(DIR_OBJS)		:
 #CLEAN
 
 clean			:
+					$(MAKE) -C mlx clean
 					$(RM) $(DIR_OBJS)
 
 fclean			:	clean

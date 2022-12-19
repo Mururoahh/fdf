@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 03:39:00 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/14 09:34:01 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/19 06:35:07 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	extra_key_hook(int keycode, t_fdf *fdf)
 	else if (keycode == KEY_RIGHT)
 		fdf->trans.y += 0.5;
 	else if (keycode == KEY_ESC)
-		exit (0);
+		exit_hook(fdf);
 }
 
 int	key_hook(int keycode, t_fdf *fdf)
@@ -86,4 +86,12 @@ int	key_hook(int keycode, t_fdf *fdf)
 		extra_key_hook(keycode, fdf);
 	draw_map(*fdf);
 	return (keycode);
+}
+
+int	exit_hook(t_fdf *fdf)
+{
+	mlx_destroy_image(fdf->mlx, fdf->img.img);
+	mlx_destroy_window(fdf->mlx, fdf->win);
+	exit(0);
+	return (0);
 }

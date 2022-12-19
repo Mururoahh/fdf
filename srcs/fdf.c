@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 06:10:27 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/14 08:20:45 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/19 06:28:11 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	init_fdf(t_fdf *fdf, char *map_name)
 	fdf->trans.x = .0;
 	fdf->trans.y = .0;
 	fdf->trans.z = fmax(fdf->map.height, fdf->map.width);
-	fdf->rot.pitch = 1.3;
-	fdf->rot.yaw = -3.9;
-	fdf->rot.roll = 0.3;
+	fdf->rot.pitch = (M_PI / 4.0);
+	fdf->rot.yaw = (M_PI / 5.0);
+	fdf->rot.roll = (M_PI / 6);
 	fdf->proj_style = PROJ_ISO;
 	init_proj_data(&fdf->proj);
 }
@@ -47,6 +47,7 @@ void	init_fdf(t_fdf *fdf, char *map_name)
 void	start_fdf(t_fdf *fdf)
 {
 	draw_map(*fdf);
-	mlx_hook(fdf->win, 2, (1L << 0), key_hook, fdf);
+	mlx_hook(fdf->win, ON_KEYDOWN, (1L << 0), key_hook, fdf);
+	mlx_hook(fdf->win, ON_DESTROY, 0L, exit_hook, fdf);
 	mlx_loop(fdf->mlx);
 }

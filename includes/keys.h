@@ -6,7 +6,7 @@
 /*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 03:41:13 by hferraud          #+#    #+#             */
-/*   Updated: 2022/12/14 09:22:07 by hferraud         ###   ########lyon.fr   */
+/*   Updated: 2022/12/19 05:37:38 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ enum
 };
 
 int	key_hook(int keycode, t_fdf *fdf);
+int	exit_hook(t_fdf *fdf);
 
 #endif
